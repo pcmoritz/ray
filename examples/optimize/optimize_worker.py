@@ -20,7 +20,7 @@ if __name__ == '__main__':
   args = parser.parse_args()
   worker.connect(args.scheduler_address, args.objstore_address, args.worker_address)
 
-  halo.register_module(halo.examples.optimization)
+  halo.register_module(optimization)
   halo.register_module(sys.modules[__name__])
   halo.register_module(ra)
   halo.register_module(ra.random)

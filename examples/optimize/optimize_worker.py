@@ -2,7 +2,7 @@ import sys
 import argparse
 import numpy as np
 
-import halo.examples.optimization
+import optimization
 
 import halo
 import halo.services as services

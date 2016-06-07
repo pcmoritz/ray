@@ -9,6 +9,6 @@ def loss(w, xs, ys):
 def grad(w, xs, ys):
   return np.dot(xs.T, np.dot(xs, w)) - np.dot(xs.T, ys), xs.shape[0]
 
-@halo.sum([np.ndarray], [np.ndarray])
+@halo.remote([np.ndarray], [np.ndarray])
 def sum(*grads):
   return sum(grads)

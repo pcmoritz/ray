@@ -18,7 +18,7 @@ num_batches = 13
 
 w_ground_truth = ra.random.normal([dim])
 x_batches = [ra.random.normal([num_data_per_batch, dim]) for _ in range(num_batches)]
-y_batches = [ra.add(ra.dot(x_batches[i], w_ground_truth), ra.random.normal([num_data_per_batch]) for i in range(num_batches)]
+y_batches = [ra.add(ra.dot(x_batches[i], w_ground_truth), ra.random.normal([num_data_per_batch])) for i in range(num_batches)]
 
 w_current = ra.random.normal([dim])
 for t in range(100):

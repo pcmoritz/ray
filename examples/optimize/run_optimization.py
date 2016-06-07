@@ -1,5 +1,5 @@
-import orchpy as op
-import orchpy.services as services
+import halo
+import halo.services as services
 import os
 import time
 import numpy as np

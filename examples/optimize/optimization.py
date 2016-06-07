@@ -5,9 +5,9 @@ import numpy as np
 def loss(w, xs, ys):
   return 0.5 * np.linalg.norm(np.dot(xs, w) - ys) ** 2
 
-@halo.remote([np.ndarray, np.ndarray, np.ndarray], [np.ndarray, int])
+@halo.remote([np.ndarray, np.ndarray, np.ndarray], [np.ndarray])
 def grad(w, xs, ys):
-  return np.dot(xs.T, np.dot(xs, w)) - np.dot(xs.T, ys), xs.shape[0]
+  return np.dot(xs.T, np.dot(xs, w)) - np.dot(xs.T, ys)
 
 @halo.remote([np.ndarray], [np.ndarray])
 def sum(*grads):

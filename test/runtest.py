@@ -133,12 +133,8 @@ class SchedulerTest(unittest.TestCase):
     value_before = "test_string"
     objref = w.submit_task("test_functions.print_string", [value_before])
 
-    time.sleep(0.2)
-
     value_after = ray.pull(objref[0], w)
     self.assertEqual(value_before, value_after)
-
-    time.sleep(0.1)
 
     services.cleanup()
 

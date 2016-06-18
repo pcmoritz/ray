@@ -96,9 +96,7 @@ def start_node(scheduler_address, node_ip_address, num_workers, worker_path=None
   time.sleep(0.2)
   for _ in range(num_workers):
     start_worker(worker_path, scheduler_address, objstore_address, address(node_ip_address, new_worker_port()))
-  time.sleep(0.3)
   ray.connect(scheduler_address, objstore_address, address(node_ip_address, new_worker_port()))
-  time.sleep(0.5)
 
 def start_singlenode_cluster(return_drivers=False, num_objstores=1, num_workers_per_objstore=0, worker_path=None):
   global drivers
@@ -118,7 +116,6 @@ def start_singlenode_cluster(return_drivers=False, num_objstores=1, num_workers_
     time.sleep(0.2)
     for _ in range(num_workers_per_objstore):
       start_worker(worker_path, scheduler_address, objstore_address, address(IP_ADDRESS, new_worker_port()))
-    time.sleep(0.3)
   # create drivers
   if return_drivers:
     driver_workers = []
@@ -127,8 +124,6 @@ def start_singlenode_cluster(return_drivers=False, num_objstores=1, num_workers_
       ray.connect(scheduler_address, objstore_address, address(IP_ADDRESS, new_worker_port()), driver_worker)
       driver_workers.append(driver_worker)
       drivers.append(driver_worker)
-    time.sleep(0.5)
     return driver_workers
   else:
     ray.connect(scheduler_address, objstore_addresses[0], address(IP_ADDRESS, new_worker_port()))
-    time.sleep(0.5)

@@ -204,6 +204,7 @@ Status SchedulerService::RegisterObjStore(ServerContext* context, const Register
   auto objtable = GET(objtable_); // to protect objects_in_transit_
   auto objstores = GET(objstores_);
   ObjStoreId objstoreid = objstores->size();
+  RAY_LOG(RAY_INFO, "Registering an object store with address " << request->objstore_address());
   auto channel = grpc::CreateChannel(request->objstore_address(), grpc::InsecureChannelCredentials());
   objstores->push_back(ObjStoreHandle());
   (*objstores)[objstoreid].address = request->objstore_address();

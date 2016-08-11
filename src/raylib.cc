@@ -821,11 +821,11 @@ static PyObject* notify_failure(PyObject* self, PyObject* args) {
   Worker* worker;
   const char* name;
   const char* error_message;
-  FailedType type;
+  int type;
   if (!PyArg_ParseTuple(args, "O&ssi", &PyObjectToWorker, &worker, &name, &error_message, &type)) {
     return NULL;
   }
-  worker->notify_failure(type, std::string(name), std::string(error_message));
+  worker->notify_failure(static_cast<FailedType>(type), std::string(name), std::string(error_message));
   Py_RETURN_NONE;
 }
 
@@ -899,11 +899,11 @@ static PyObject* alias_objectids(PyObject* self, PyObject* args) {
 
 static PyObject* start_worker_service(PyObject* self, PyObject* args) {
   Worker* worker;
-  Mode mode;
+  int mode;
   if (!PyArg_ParseTuple(args, "O&i", &PyObjectToWorker, &worker, &mode)) {
     return NULL;
   }
-  worker->start_worker_service(mode);
+  worker->start_worker_service(static_cast<Mode>(mode));
   Py_RETURN_NONE;
 }
 

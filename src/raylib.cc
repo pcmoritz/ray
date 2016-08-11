@@ -889,6 +889,20 @@ static PyObject* request_object(PyObject* self, PyObject* args) {
   Py_RETURN_NONE;
 }
 
+static PyObject* is_object_ready(PyObject* self, PyObject* args) {
+  Worker* worker;
+  ObjectID objectid;
+  if (!PyArg_ParseTuple(args, "O&O&", &PyObjectToWorker, &worker, &PyObjectToObjectID, &objectid)) {
+    return NULL;
+  }
+  bool is_ready = worker->is_object_ready(objectid);
+  if (is_ready){
+    Py_RETURN_TRUE;
+  }
+  else {
+    Py_RETURN_FALSE;
+  }
+}
 static PyObject* alias_objectids(PyObject* self, PyObject* args) {
   Worker* worker;
   ObjectID alias_objectid;
@@ -1056,6 +1070,7 @@ static PyMethodDef RayLibMethods[] = {
  { "get_object", get_object, METH_VARARGS, "get protocol buffer object from the local object store" },
  { "get_objectid", get_objectid, METH_VARARGS, "register a new object reference with the scheduler" },
  { "request_object" , request_object, METH_VARARGS, "request an object to be delivered to the local object store" },
+ { "is_object_ready" , is_object_ready, METH_VARARGS, "checks the scheduler to see if a object can be gotten" },
  { "alias_objectids", alias_objectids, METH_VARARGS, "make two objectids refer to the same object" },
  { "wait_for_next_message", wait_for_next_message, METH_VARARGS, "get next message from scheduler (blocking)" },
  { "submit_task", submit_task, METH_VARARGS, "call a remote function" },

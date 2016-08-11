@@ -771,6 +771,10 @@ def put(value, worker=global_worker):
   worker.put_object(objectid, value)
   return objectid
 
+def select(objectids, worker=global_worker):
+  check_connected(worker)
+  return [index for index, objectid in enumerate(objectids) if raylib.is_object_ready(worker.handle, objectid)]
+
 def kill_workers(worker=global_worker):
   """Kill all of the workers in the cluster. This does not kill drivers.
 

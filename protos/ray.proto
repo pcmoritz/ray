@@ -58,6 +58,8 @@ service Scheduler {
   rpc ExportReusableVariable(ExportReusableVariableRequest) returns (AckReply);
   // Notify the scheduler that a failure occurred while running a task, importing a remote function, or importing a reusable variable.
   rpc NotifyFailure(NotifyFailureRequest) returns (AckReply);
+  
+  rpc IsReady(isReadyRequest) returns (isReadyReply);
 }
 
 message AckReply {
@@ -167,6 +169,13 @@ message SchedulerInfoReply {
   CompGraph computation_graph = 6; // The computation graph constructed so far
 }
 
+message isReadyRequest {
+  uint64 objectid = 1;
+}
+
+message isReadyReply {
+  bool ready = 1;
+}
 // Object stores
 
 service ObjStore {
@@ -297,3 +306,4 @@ message WorkerMessage {
 message PrintErrorMessageRequest {
   Failure failure = 1; // The failure object.
 }
+

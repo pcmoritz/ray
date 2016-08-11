@@ -400,6 +400,16 @@ void Worker::task_info(ClientContext &context, TaskInfoRequest &request, TaskInf
   scheduler_stub_->TaskInfo(&context, request, &reply);
 }
 
+bool Worker::is_object_ready(ObjectID objectid) {
+  RAY_CHECK(connected_, "Attempted to test if object was ready but failed.");
+  ClientContext context;
+  isReadyRequest request;
+  isReadyReply reply;
+  request.set_objectid(objectid);
+  scheduler_stub_->IsReady(&context, request, &reply);
+  return reply.ready();
+}
+
 bool Worker::export_remote_function(const std::string& function_name, const std::string& function) {
   RAY_CHECK(connected_, "Attempted to export function but failed.");
   ClientContext context;

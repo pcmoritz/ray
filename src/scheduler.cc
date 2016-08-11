@@ -547,6 +547,18 @@ Status SchedulerService::ExportReusableVariable(ServerContext* context, const Ex
   return Status::OK;
 }
 
+Status SchedulerService::IsReady(ServerContext* context, const isReadyRequest* request, isReadyReply* reply) {
+  auto objtable = GET(objtable_);
+  ObjectID objectid = request->objectid();
+  if (!has_canonical_objectid(objectid)) {
+    reply->set_ready(false);
+    return Status::OK;
+  }
+  ObjectID canonical_objectid = get_canonical_objectid(objectid);
+  reply->set_ready(!(canonical_objectid >= objtable->size() || (*objtable)[canonical_objectid].size() == 0));
+  return Status::OK;
+}
+
 void SchedulerService::deliver_object_async_if_necessary(ObjectID canonical_objectid, ObjStoreId from, ObjStoreId to) {
   bool object_present_or_in_transit;
   {

@@ -102,6 +102,7 @@ class Worker {
   void scheduler_info(ClientContext &context, SchedulerInfoRequest &request, SchedulerInfoReply &reply);
   // get task statuses from scheduler
   void task_info(ClientContext &context, TaskInfoRequest &request, TaskInfoReply &reply);
+  bool is_object_ready(ObjectID objectid);
   // export function to workers
   bool export_remote_function(const std::string& function_name, const std::string& function);
   // export reusable variable to workers

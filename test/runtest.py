@@ -576,13 +576,38 @@ class PythonCExtensionTest(unittest.TestCase):
     ray.init(start_ray_local=True, num_workers=1)
 
     # Make sure that we aren't accidentally messing up Python's reference counts.
-    for obj in [None, True, False]:
-      @ray.remote([], [int])
-      def f():
-        return sys.getrefcount(obj)
-      first_count = ray.get(f.remote())
-      second_count = ray.get(f.remote())
-      self.assertEqual(first_count, second_count)
+    @ray.remote([], [int])
+    def f():
+      return sys.getrefcount(None)
+    first_count = ray.get(f.remote())
+    second_count = ray.get(f.remote())
+    self.assertEqual(first_count, second_count)
+
+    ray.worker.cleanup()
+
+  def testReferenceCountNone(self):
+    ray.init(start_ray_local=True, num_workers=1)
+
+    # Make sure that we aren't accidentally messing up Python's reference counts.
+    @ray.remote([], [int])
+    def f():
+      return sys.getrefcount(True)
+    first_count = ray.get(f.remote())
+    second_count = ray.get(f.remote())
+    self.assertEqual(first_count, second_count)
+
+    ray.worker.cleanup()
+
+  def testReferenceCountNone(self):
+    ray.init(start_ray_local=True, num_workers=1)
+
+    # Make sure that we aren't accidentally messing up Python's reference counts.
+    @ray.remote([], [int])
+    def f():
+      return sys.getrefcount(False)
+    first_count = ray.get(f.remote())
+    second_count = ray.get(f.remote())
+    self.assertEqual(first_count, second_count)
 
     ray.worker.cleanup()
 

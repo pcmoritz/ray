@@ -665,12 +665,12 @@ static PyObject* create_worker(PyObject* self, PyObject* args) {
   // The object store address can be the empty string, in which case the
   // scheduler will choose the object store address.
   const char* objstore_address;
-  Mode mode;
+  int mode;
   if (!PyArg_ParseTuple(args, "sssi", &node_ip_address, &scheduler_address, &objstore_address, &mode)) {
     return NULL;
   }
-  bool is_driver = (mode != Mode::WORKER_MODE);
-  Worker* worker = new Worker(std::string(node_ip_address), std::string(scheduler_address), mode);
+  bool is_driver = (static_cast<Mode>(mode) != Mode::WORKER_MODE);
+  Worker* worker = new Worker(std::string(node_ip_address), std::string(scheduler_address), static_cast<Mode>(mode));
   worker->register_worker(std::string(node_ip_address), std::string(objstore_address), is_driver);
 
   PyObject* t = PyTuple_New(2);

@@ -388,7 +388,7 @@ class TaskStatusTest(unittest.TestCase):
 
     ray.worker.cleanup()
 
-  @unittest.skip("This test is currently disabled because it fails on Travis.")
+  # @unittest.skip("This test is currently disabled because it fails on Travis.")
   def testFailImportingRemoteFunction(self):
     ray.init(start_ray_local=True, num_workers=2, driver_mode=ray.SILENT_MODE)
 
@@ -407,7 +407,7 @@ class TaskStatusTest(unittest.TestCase):
       def __call__(self):
         return
     ray.remote([], [])(Foo())
-    time.sleep(0.1)
+    time.sleep(1)
     self.assertTrue("There is a problem here." in ray.task_info()["failed_remote_function_imports"][0]["error_message"])
 
     ray.worker.cleanup()
@@ -422,7 +422,7 @@ class TaskStatusTest(unittest.TestCase):
         raise Exception("The initializer failed.")
       return 0
     ray.reusables.foo = ray.Reusable(initializer)
-    time.sleep(0.1)
+    time.sleep(1)
     # Check that the error message is in the task info.
     self.assertTrue("The initializer failed." in ray.task_info()["failed_reusable_variable_imports"][0]["error_message"])
 
@@ -440,7 +440,7 @@ class TaskStatusTest(unittest.TestCase):
     def use_foo():
       ray.reusables.foo
     use_foo.remote()
-    time.sleep(0.1)
+    time.sleep(1)
     # Check that the error message is in the task info.
     self.assertTrue("The reinitializer failed." in ray.task_info()["failed_reinitialize_reusable_variables"][0]["error_message"])
 

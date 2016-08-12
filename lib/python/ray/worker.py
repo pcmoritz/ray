@@ -724,8 +724,8 @@ def connect(node_ip_address, scheduler_address, objstore_address=None, is_driver
   # GRPC commands from the scheduler to print error messages. We pass in the
   # mode below. This tells the WorkerService whether it is operating for a
   # driver or a worker and whether it should surpress errors or not.
-  if is_driver:
-    raylib.start_worker_service(worker.handle, mode)
+  # if is_driver:
+    # raylib.start_worker_service(worker.handle, mode)
 
 def disconnect(worker=global_worker):
   """Disconnect this worker from the scheduler and object store."""

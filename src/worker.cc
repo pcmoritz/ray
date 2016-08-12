@@ -387,9 +387,9 @@ void Worker::disconnect() {
   connected_ = false;
   // Shut down the worker service. This will cause the call to server->Wait() to
   // return.
-  server_ptr_->Shutdown();
+  // server_ptr_->Shutdown();
   // Wait for the thread that launched the worker service to return.
-  worker_server_thread_->join();
+  // worker_server_thread_->join();
 }
 
 // TODO(rkn): Should we be using pointers or references? And should they be const?

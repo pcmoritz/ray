@@ -336,7 +336,7 @@ Status SchedulerService::NotifyFailure(ServerContext* context, const NotifyFailu
         PrintErrorMessageRequest print_request;
         print_request.mutable_failure()->CopyFrom(request->failure());
         AckReply print_reply;
-        Status status = worker->worker_stub->PrintErrorMessage(&client_context, print_request, &print_reply);
+        // Status status = worker->worker_stub->PrintErrorMessage(&client_context, print_request, &print_reply);
       }
     }
   }

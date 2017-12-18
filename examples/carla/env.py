@@ -33,14 +33,19 @@ class CarlaEnv(gym.Env):
         # Create a new server process and start the client.
         self.server_process = None
         self.server_port = random.randint(10000, 60000)
+        self.server_logfile = open("/tmp/carla-" + str(random.randint(0, 1000)), "w")
         self.server_process = subprocess.Popen(
             [os.environ.get(
                 "CARLA_SERVER", "/home/ubuntu/carla-0.7/CarlaUE4.sh"),
              "/Game/Maps/Town01",
-             "-windowed", "-ResX=400", "-ResY=300",
+             "-windowed", "-ResX=128", "-ResY=128",
+             "-carla-settings=/home/ubuntu/carla-0.7/Example.CarlaSettings.ini",
              "-carla-server",
+             "-benchmark",
+             "-fps=15",
              "-carla-world-port={}".format(self.server_port)],
-            preexec_fn=os.setsid)
+            preexec_fn=os.setsid, stdout=self.server_logfile,
+            stderr=subprocess.STDOUT)
 
         self.client = CarlaClient("localhost", self.server_port)
         self.client.connect()
@@ -50,6 +55,7 @@ class CarlaEnv(gym.Env):
     def __del__(self):
         self.client.disconnect()
         if self.server_process:
+            close(self.server_logfile)
             os.killpg(os.getpgid(self.server_process.pid), signal.SIGKILL)
 
     def reset(self):
@@ -68,19 +74,10 @@ class CarlaEnv(gym.Env):
             WeatherId=random.choice([1, 3, 7, 8, 14]))
         settings.randomize_seeds()
 
-        # Now we want to add a couple of cameras to the player vehicle.
-        # We will collect the images produced by these cameras every
+        # Now we want to add a depth camera to the player vehicle.
+        # We will collect the images produced by this camera every
         # frame.
 
-        # The default camera captures RGB images of the scene.
-        camera0 = Camera('CameraRGB')
-        # Set image resolution in pixels.
-        camera0.set_image_size(X_RES, Y_RES)
-        # Set its position relative to the car in centimeters.
-        camera0.set_position(30, 0, 130)
-        settings.add_sensor(camera0)
-
-        # Let's add another camera producing ground-truth depth.
         camera1 = Camera('CameraDepth', PostProcessing='Depth')
         camera1.set_image_size(X_RES, Y_RES)
         camera1.set_position(30, 0, 130)
@@ -113,7 +110,7 @@ class CarlaEnv(gym.Env):
         image, measurements = self._read_observation()
         reward, done = compute_reward(self.prev_measurement, measurements)
         self.prev_measurement = measurements
-        if self.num_steps > os.environ.get("CARLA_MAX_STEPS", 10):
+        if self.num_steps > os.environ.get("CARLA_MAX_STEPS", 50):
             done = True
         self.num_steps += 1
         info = {}
